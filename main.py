@@ -4,7 +4,7 @@ from pathlib import Path
 from dotenv import load_dotenv
 from fastapi import FastAPI
 from pydantic import BaseModel
-
+from fastapi.responses import StreamingResponse
 class ChatRequest(BaseModel):
     question: str
 
@@ -56,6 +56,15 @@ def chat(request: ChatRequest):
             "content": request.question
         }
     ]
-    response = client.chat.completions.create(model= model, messages=messages, temperature=0)
-    answer  = response.choices[0].message.content
-    return {"AI: ": answer}
+    def generate_response():
+        response = client.chat.completions.create(
+            model= model,
+            messages=messages,
+            temperature=0,
+            stream = True
+        )
+        for chunk in response:
+            data = chunk.choices[0].delta.content
+            if data: 
+                yield data
+    return StreamingResponse(generate_response(), media_type = "text/plain")
