@@ -2,7 +2,14 @@ import os
 from groq import Groq
 from pathlib import Path
 from dotenv import load_dotenv
+from fastapi import FastAPI
+from pydantic import BaseModel
+
+class ChatRequest(BaseModel):
+    question: str
+
 load_dotenv()
+app = FastAPI()
 
 my_api_key = os.getenv("GROQ_API_KEY")
 if not my_api_key:
@@ -34,24 +41,21 @@ Rules:
 - If the answer is not available in the profile, say so.
 - Keep responses accurate, professional, and recruiter-friendly.
 """
-
-HR_question = input("HR: ")
-def get_response ():
+@app.get("/")
+def home():
+    return {"message": "AI portforlio root route is working"}
+@app.post("/chat")
+def chat(request: ChatRequest):
     messages = [
         {
             "role": "system",
             "content": system_prompt
         },
         {
-            "role": "user",
-            "content": HR_question
+            "role": "user", 
+            "content": request.question
         }
     ]
-    response = client.chat.completions.create(model = model, messages = messages, temperature = 0, stream = True)
-    return response
-
-AI_answer = get_response()
-for chunk in AI_answer:
-    data = chunk.choices[0].delta.content
-    if data: 
-        print(data, end="", flush= True)
+    response = client.chat.completions.create(model= model, messages=messages, temperature=0)
+    answer  = response.choices[0].message.content
+    return {"AI: ": answer}
