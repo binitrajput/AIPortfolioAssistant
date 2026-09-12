@@ -1,0 +1,178 @@
+Name: Binit Rajput
+
+Education:
+- Pursuing Bachelor of Technology in Electronics and Communication Engineering (Industrial Internet of Things) at National Institute of Technology, Kurukshetra.
+- Expected graduation: 2027.
+- Current CGPA: 8.18.
+- Senior Secondary: St Joseph Indian Composite PU College, KSEAB, 94%, 2021.
+- Matriculation: The Colonel Hill English High School, KSEAB, 88.64%, 2019.
+- Secured 98.48 percentile in JEE Main.
+
+Technical Skills:
+
+Programming Languages:
+- C++
+- Python
+- JavaScript
+- SQL
+
+AI and Generative AI:
+- LLM APIs
+- Prompt Engineering
+- Generative AI
+- AI-powered Applications
+
+Frontend:
+- React.js
+- HTML5
+- CSS3
+- Tailwind CSS
+- Bootstrap
+- EJS
+
+Backend:
+- FastAPI
+- Node.js
+- Express.js
+- REST APIs
+- Passport.js
+
+Databases:
+- SQL
+- MongoDB
+
+Developer Tools:
+- Git
+- GitHub
+- VS Code
+- Postman
+- Cloudinary
+- Render
+
+Core Computer Science:
+- Data Structures and Algorithms
+- Object-Oriented Programming
+- Database Management Systems
+- Operating Systems
+- Computer Networks
+
+Areas of Interest:
+- Generative AI
+- Agentic AI
+- Backend Development
+- Full-Stack Development
+
+
+PROJECTS:
+
+1. AI Portfolio Assistant
+
+Type:
+- AI-powered interactive portfolio and resume chatbot.
+
+Description:
+- An AI-powered assistant designed to allow recruiters to ask natural language questions about Binit's education, technical skills, projects, experience, and achievements.
+
+Technologies:
+- Python
+- FastAPI
+- React
+- LLM APIs
+
+Planned functionality:
+- Answer recruiter questions about Binit's professional profile.
+- Provide context-aware responses using portfolio and resume information.
+- Process recruiter queries through a backend API.
+- Provide an interactive chat interface.
+- Use portfolio-specific context to generate relevant responses.
+
+
+2. YuktaVihar
+
+Type:
+- Full-stack vacation rental marketplace.
+
+Duration:
+- July 2026 - Present.
+
+Description:
+- A full-stack vacation rental marketplace built using the MVC architecture.
+
+Technologies:
+- EJS
+- Node.js
+- Express.js
+- MongoDB
+- Bootstrap CSS
+- Cloudinary
+- Passport.js
+
+Features:
+- User authentication and authorization.
+- Property listing CRUD operations.
+- RESTful APIs.
+- Server-side validation.
+- Protected routes for users and listing owners.
+- Cloudinary integration for image storage.
+- MongoDB for persistent data management.
+- Modular MVC-based backend architecture.
+
+
+3. Vision Bridge
+
+Type:
+- Real-time video conferencing platform.
+
+Duration:
+- March 2026 - April 2026.
+
+Description:
+- A real-time video conferencing platform supporting 100+ users.
+
+Technologies:
+- React.js
+- Node.js
+- Express.js
+- WebRTC
+- Socket.io
+- MongoDB
+- Bcrypt
+
+Features:
+- Real-time audio and video communication.
+- Real-time signaling using Socket.io.
+- Room management.
+- Users can create and join video conferencing sessions.
+- Peer-to-peer communication using WebRTC.
+- RESTful APIs using Express.js.
+- MongoDB for data persistence.
+- Authentication using Bcrypt.
+- Deployed application for live access.
+
+
+ACHIEVEMENTS:
+
+- Solved 300+ Data Structures and Algorithms problems across various platforms.
+- Secured 98.48 percentile in the JEE Main Examination.
+
+
+PROFESSIONAL PROFILE:
+
+- Software Engineering student with strong foundations in C++, Python, Data Structures and Algorithms, and full-stack development.
+- Interested in Generative AI, Agentic AI, backend development, and scalable AI-powered applications.
+- Has experience building full-stack applications and AI-powered applications using modern web technologies and LLM APIs.
+
+
+CONTACT:
+
+GitHub:
+https://github.com/binitrajput
+
+LinkedIn:
+https://www.linkedin.com/in/binit-rajput-307a923b9/
+
+LeetCode:
+https://leetcode.com/u/binit_rajput/
+
+GeeksforGeeks:
+https://www.geeksforgeeks.org/profile/binitrajput5?tab=activity
