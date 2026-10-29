@@ -45,9 +45,14 @@ const projects = [
   },
   {
     name: 'AI Portfolio Assistant',
-    type: 'A portfolio you can talk to',
-    description: 'A context-aware assistant that helps recruiters explore my experience through natural conversation.',
-    stack: ['React', 'FastAPI', 'Groq', 'LLM APIs'],
+    type: 'AI-powered recruiter Q&A',
+    description: 'A recruiter-facing assistant that answers natural-language questions about my education, skills, projects, and experience.',
+    highlights: [
+      'Uses portfolio context and prompt constraints to keep answers focused on recruiter questions.',
+      'Streams responses end to end with FastAPI StreamingResponse and React ReadableStream.',
+      'Deployed on Vercel and Render with Groq-hosted LLMs.',
+    ],
+    stack: ['React', 'FastAPI', 'Groq', 'Streaming', 'Vercel', 'Render'],
     className: 'project-ai',
     mark: 'AI',
     shape: 'assistant',
@@ -480,6 +485,7 @@ function App() {
                 <div className="project-info">
                 <div className="project-title-row"><div><p className="project-type">{project.type}</p>{project.live ? <h3><a href={project.live} target="_blank" rel="noreferrer">{project.name}</a></h3> : <h3>{project.name}</h3>}{project.date && <p className="project-date">{project.date}</p>}</div>{project.live && <a className="project-arrow" href={project.live} target="_blank" rel="noreferrer" aria-label={`Open ${project.name} live site`}>↗</a>}</div>
                   <p className="project-description">{project.description}</p>
+                  {project.highlights && <ul className="project-highlights">{project.highlights.map((highlight) => <li key={highlight}>{highlight}</li>)}</ul>}
                   <div className="tag-list">{project.stack.map((item) => <span key={item}>{item}</span>)}</div>
                 {project.repo && <div className="project-external-links"><a href={project.repo} target="_blank" rel="noreferrer">GitHub <span>↗</span></a>{project.live && <a href={project.live} target="_blank" rel="noreferrer">Live link <span>↗</span></a>}</div>}
                 </div>
