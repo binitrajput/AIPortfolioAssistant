@@ -97,7 +97,7 @@ function App() {
   const messagesRef = useRef(null)
   const heroMessagesRef = useRef(null)
   const projectsTrackRef = useRef(null)
-  const projectDragRef = useRef({ active: false, settling: false, startX: 0, startScroll: 0, lastX: 0, lastTime: 0, velocity: 0, frame: 0 })
+  const projectDragRef = useRef({ active: false, settling: false, moved: false, suppressClick: false, captureTarget: null, startX: 0, startScroll: 0, lastX: 0, lastTime: 0, velocity: 0, frame: 0 })
 
   function scrollProjects(direction) {
     const track = projectsTrackRef.current
@@ -110,20 +110,22 @@ function App() {
 
   function handleProjectPointerDown(event) {
     if (event.pointerType !== 'mouse' || event.button !== 0) return
-    if (event.target.closest('a, button')) return
     const track = projectsTrackRef.current
     if (!track) return
     if (projectDragRef.current.frame) cancelAnimationFrame(projectDragRef.current.frame)
     const now = performance.now()
-    projectDragRef.current = { active: true, settling: false, startX: event.clientX, startScroll: track.scrollLeft, lastX: event.clientX, lastTime: now, velocity: 0, frame: 0 }
+    const captureTarget = event.target instanceof Element ? event.target.closest('a') || track : track
+    projectDragRef.current = { active: true, settling: false, moved: false, suppressClick: false, captureTarget, startX: event.clientX, startScroll: track.scrollLeft, lastX: event.clientX, lastTime: now, velocity: 0, frame: 0 }
     track.classList.add('is-dragging')
-    track.setPointerCapture(event.pointerId)
+    captureTarget.setPointerCapture(event.pointerId)
   }
 
   function handleProjectPointerMove(event) {
     const drag = projectDragRef.current
     const track = projectsTrackRef.current
     if (!drag.active || !track) return
+    if (!drag.moved && Math.abs(event.clientX - drag.startX) < 6) return
+    drag.moved = true
     event.preventDefault()
     track.scrollLeft = drag.startScroll - (event.clientX - drag.startX)
     const now = performance.now()
@@ -139,7 +141,13 @@ function App() {
     if (!projectDragRef.current.active || !track) return
     const drag = projectDragRef.current
     drag.active = false
-    if (track.hasPointerCapture(event.pointerId)) track.releasePointerCapture(event.pointerId)
+    if (drag.captureTarget?.hasPointerCapture(event.pointerId)) drag.captureTarget.releasePointerCapture(event.pointerId)
+    drag.captureTarget = null
+    if (!drag.moved) {
+      track.classList.remove('is-dragging')
+      return
+    }
+    drag.suppressClick = true
     let velocity = Math.max(-1.4, Math.min(1.4, drag.velocity))
     let lastFrame = performance.now()
     const settleAtCenter = () => {
@@ -198,6 +206,13 @@ function App() {
     }
     if (Math.abs(velocity) > 0.025) drag.frame = requestAnimationFrame(glide)
     else settleAtCenter()
+  }
+
+  function handleProjectClickCapture(event) {
+    if (!projectDragRef.current.suppressClick) return
+    projectDragRef.current.suppressClick = false
+    event.preventDefault()
+    event.stopPropagation()
   }
 
   useEffect(() => {
@@ -439,7 +454,7 @@ function App() {
           <p className="section-note">Small teams, big ideas, and a lot of learning along the way.</p>
         </div>
         <div className="projects-wheel-wrap">
-          <div className="projects-wheel" ref={projectsTrackRef} onScroll={handleProjectsScroll} onPointerDown={handleProjectPointerDown} onPointerMove={handleProjectPointerMove} onPointerUp={handleProjectPointerUp} onPointerCancel={handleProjectPointerUp} aria-label="Project carousel. Drag horizontally to explore projects.">
+          <div className="projects-wheel" ref={projectsTrackRef} onScroll={handleProjectsScroll} onPointerDown={handleProjectPointerDown} onPointerMove={handleProjectPointerMove} onPointerUp={handleProjectPointerUp} onPointerCancel={handleProjectPointerUp} onClickCapture={handleProjectClickCapture} onDragStart={(event) => event.preventDefault()} aria-label="Project carousel. Drag horizontally to explore projects.">
             {[...projects, ...projects, ...projects].map((project, index, allProjects) => {
               const previousIndex = (activeProjectIndex - 1 + allProjects.length) % allProjects.length
               const nextIndex = (activeProjectIndex + 1) % allProjects.length
