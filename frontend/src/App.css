@@ -67,6 +67,7 @@ h1, h2, h3, p { margin-top: 0; }
 .project-card.is-active { opacity: 1; transform: scale(1); }
 .project-card.is-previous { transform: perspective(1200px) rotateY(-8deg) rotateZ(-3deg) translateY(20px) scale(.86); }
 .project-card.is-next { transform: perspective(1200px) rotateY(8deg) rotateZ(3deg) translateY(20px) scale(.86); }
+.project-preview-link { display: block; color: inherit; cursor: pointer; }
 .project-art { height: clamp(330px, 33vw, 410px); border-radius: 5px; position: relative; overflow: hidden; isolation: isolate; }
 .project-art.has-photo { background: #f1f2ef; }
 .project-photo { position: absolute; inset: 0; display: block; width: 100%; height: 100%; object-fit: contain; padding: 10px; border-radius: 13px; pointer-events: none; user-select: none; -webkit-user-drag: none; }
