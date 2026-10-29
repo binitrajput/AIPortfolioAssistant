@@ -444,8 +444,15 @@ function App() {
               const previousIndex = (activeProjectIndex - 1 + allProjects.length) % allProjects.length
               const nextIndex = (activeProjectIndex + 1) % allProjects.length
               const inMiddleSet = index >= projects.length && index < projects.length * 2
+              const PreviewLink = project.live ? 'a' : 'div'
+              const previewLinkProps = project.live ? {
+                href: project.live,
+                target: '_blank',
+                rel: 'noreferrer',
+                'aria-label': `Open ${project.name} live site`,
+              } : {}
               return <article className={`project-card arc-card-${index % projects.length} ${project.className} ${activeProjectIndex === index ? 'is-active' : ''} ${index === previousIndex ? 'is-previous' : ''} ${index === nextIndex ? 'is-next' : ''}`} key={`${project.name}-${index}`} aria-hidden={!inMiddleSet} inert={!inMiddleSet}>
-                <a className="project-preview-link" href={project.live || project.repo} target="_blank" rel="noreferrer" aria-label={`Open ${project.name} ${project.live ? 'live site' : 'GitHub repository'}`}>
+                <PreviewLink className="project-preview-link" {...previewLinkProps}>
                 <div className={`project-art ${project.shape} ${project.image ? 'has-photo' : ''}`}>
                   {project.image && <img className="project-photo" src={project.image} alt={`${project.name} screenshot`} loading="lazy" draggable="false" />}
                   {project.shape === 'stay' && <><div className="stay-sun" /><div className="stay-house"><span /></div><div className="stay-hill hill-back" /><div className="stay-hill hill-front" /><span className="art-label">TAKE THE SCENIC ROUTE</span></>}
@@ -454,9 +461,9 @@ function App() {
                   {project.shape === 'portfolio' && <><div className="portfolio-window"><div className="portfolio-window-top"><i /><i /><i /></div><div className="portfolio-window-content"><span>HELLO, I’M BINIT</span><b>Building useful<br />things for the internet.</b><i>SELECTED WORK&nbsp;&nbsp; ABOUT&nbsp;&nbsp; CONTACT</i></div></div><div className="portfolio-orbit" /><span className="art-label">A DIGITAL HOME FOR MY WORK</span></>}
                   {project.shape === 'finance' && <><div className="finance-sheet"><div className="finance-sheet-heading"><span>INVOICE REVIEW</span><b>✓ VERIFIED</b></div><div className="invoice-row"><i /><span>INV-2048 · ACME SUPPLY</span><b>$1,240.00</b></div><div className="invoice-row"><i /><span>INV-2049 · NORTHSTAR CO.</span><b>$860.50</b></div><div className="invoice-row flagged"><i /><span>INV-2050 · DUPLICATE CHECK</span><b>REVIEW</b></div><div className="ledger-total"><span>LEDGER STATUS</span><b>Balanced <i>✓</i></b></div></div><span className="finance-stamp">HUMAN<br />APPROVED</span><span className="art-label">TRACEABLE BY DESIGN</span></>}
                 </div>
-                </a>
+                </PreviewLink>
                 <div className="project-info">
-                <div className="project-title-row"><div><p className="project-type">{project.type}</p><h3><a href={project.live || project.repo} target="_blank" rel="noreferrer">{project.name}</a></h3>{project.date && <p className="project-date">{project.date}</p>}</div>{project.repo && <a className="project-arrow" href={project.live || project.repo} target="_blank" rel="noreferrer" aria-label={`Open ${project.name} project`}>↗</a>}</div>
+                <div className="project-title-row"><div><p className="project-type">{project.type}</p>{project.live ? <h3><a href={project.live} target="_blank" rel="noreferrer">{project.name}</a></h3> : <h3>{project.name}</h3>}{project.date && <p className="project-date">{project.date}</p>}</div>{project.live && <a className="project-arrow" href={project.live} target="_blank" rel="noreferrer" aria-label={`Open ${project.name} live site`}>↗</a>}</div>
                   <p className="project-description">{project.description}</p>
                   <div className="tag-list">{project.stack.map((item) => <span key={item}>{item}</span>)}</div>
                 {project.repo && <div className="project-external-links"><a href={project.repo} target="_blank" rel="noreferrer">GitHub <span>↗</span></a>{project.live && <a href={project.live} target="_blank" rel="noreferrer">Live link <span>↗</span></a>}</div>}
