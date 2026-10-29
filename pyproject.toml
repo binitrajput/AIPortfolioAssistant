@@ -1,7 +1,7 @@
 [project]
 name = "ai-portfolio"
 version = "0.1.0"
-description = "Add your description here"
+description = "A React portfolio with a FastAPI-powered AI assistant."
 readme = "README.md"
 authors = [
     { name = "binitrajput", email = "binitrajput5@gmail.com" }
@@ -14,9 +14,6 @@ dependencies = [
     "python-dotenv>=1.2.3",
     "uvicorn>=0.52.4",
 ]
-
-[project.scripts]
-ai-portfolio = "ai_portfolio:main"
 
 [build-system]
 requires = ["uv_build>=0.12.5,<0.13.0"]

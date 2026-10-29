@@ -1,2 +1,1 @@
-def main() -> None:
-    print("Hello from ai-portfolio!")
+"""FastAPI backend for the AI portfolio assistant."""

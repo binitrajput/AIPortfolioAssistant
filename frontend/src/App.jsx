@@ -3,6 +3,20 @@ import financeDashboard from './assets/projects/Autonomous Finance Clerk Dashboa
 import portfolioAssistantPreview from './assets/projects/AI Portfolio Assistant Hero Mockup.png'
 import visionBridgePreview from './assets/projects/Vision Bridge.png'
 import yuktaViharPreview from './assets/projects/YuktaVihar Vacation Rental Showcase (1).png'
+import educationCard from './assets/projects/Education.png'
+import skillsCard from './assets/projects/2.png'
+import projectsCard from './assets/projects/Projects.png'
+import experienceCard from './assets/projects/Experience.png'
+import sceneOval from './assets/projects/Oval.png'
+import sceneArrow from './assets/projects/Arrow.png'
+import sceneCircularLines from './assets/projects/circular_lines.png'
+import reactLogo from './assets/projects/react.png'
+import pythonLogo from './assets/projects/python.png'
+import llmLogo from './assets/projects/llm.png'
+import fastapiLogo from './assets/projects/fastapi.png'
+import linkedinLogo from './assets/projects/Linkedin-Transparent.webp'
+import githubLogo from './assets/projects/github.png'
+import leetcodeLogo from './assets/projects/leetcode.png'
 import './App.css'
 
 const projects = [
@@ -71,11 +85,12 @@ function App() {
   const [isSending, setIsSending] = useState(false)
   const [chatOpen, setChatOpen] = useState(false)
   const [nearPageEnd, setNearPageEnd] = useState(false)
-  const [hideNavAtProjects, setHideNavAtProjects] = useState(false)
+  const [atWorkSection, setAtWorkSection] = useState(false)
   const [activeProjectIndex, setActiveProjectIndex] = useState(projects.length)
   const [theme, setTheme] = useState(() => window.localStorage.getItem('portfolio-theme') || 'light')
   const inputRef = useRef(null)
   const messagesRef = useRef(null)
+  const heroMessagesRef = useRef(null)
   const projectsTrackRef = useRef(null)
   const projectDragRef = useRef({ active: false, settling: false, startX: 0, startScroll: 0, lastX: 0, lastTime: 0, velocity: 0, frame: 0 })
 
@@ -184,11 +199,40 @@ function App() {
   }, [theme])
 
   useEffect(() => {
+    const revealSelector = '.hero-copy, .hero-chat-scene, .ticker, .section-heading, .projects-wheel-wrap, .project-card, .about-grid > *, .skill, .numbers-row > div, .education-note, .contact-inner > *, .footer > *'
+    const revealItems = document.querySelectorAll(
+      revealSelector,
+    )
+    revealItems.forEach((item) => {
+      const siblings = Array.from(item.parentElement.children).filter((sibling) => sibling.matches(revealSelector))
+      const stagger = Math.min(siblings.indexOf(item), 4) * 65
+      item.style.setProperty('--reveal-delay', `${stagger}ms`)
+      item.classList.add('scroll-reveal')
+    })
+
+    if (!('IntersectionObserver' in window)) {
+      revealItems.forEach((item) => item.classList.add('is-revealed'))
+      return undefined
+    }
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return
+        entry.target.classList.add('is-revealed')
+        observer.unobserve(entry.target)
+      })
+    }, { threshold: 0.12, rootMargin: '0px 0px -36px 0px' })
+
+    revealItems.forEach((item) => observer.observe(item))
+    return () => observer.disconnect()
+  }, [])
+
+  useEffect(() => {
     const updatePageEnd = () => {
       const remaining = document.documentElement.scrollHeight - window.innerHeight - window.scrollY
       setNearPageEnd(remaining < 300)
       const projectsSection = document.getElementById('work')
-      setHideNavAtProjects(Boolean(projectsSection && window.scrollY >= projectsSection.offsetTop - window.innerHeight * 0.8))
+      setAtWorkSection(Boolean(projectsSection && window.scrollY >= projectsSection.offsetTop - 20))
     }
     updatePageEnd()
     window.addEventListener('scroll', updatePageEnd, { passive: true })
@@ -196,31 +240,6 @@ function App() {
     return () => {
       window.removeEventListener('scroll', updatePageEnd)
       window.removeEventListener('resize', updatePageEnd)
-    }
-  }, [])
-
-  useEffect(() => {
-    let pageIsScrolling = false
-    let resumeTimer
-    const pauseWhileScrolling = () => {
-      pageIsScrolling = true
-      window.clearTimeout(resumeTimer)
-      resumeTimer = window.setTimeout(() => { pageIsScrolling = false }, 1200)
-    }
-    window.addEventListener('scroll', pauseWhileScrolling, { passive: true })
-    const timer = window.setInterval(() => {
-      const track = projectsTrackRef.current
-      if (pageIsScrolling || !track || projectDragRef.current.active || projectDragRef.current.frame || track.scrollWidth <= track.clientWidth) return
-      const firstCard = track.children[0]
-      const secondCard = track.children[1]
-      if (!firstCard || !secondCard) return
-      const step = secondCard.getBoundingClientRect().left - firstCard.getBoundingClientRect().left
-      track.scrollTo({ left: track.scrollLeft + step, behavior: 'smooth' })
-    }, 5000)
-    return () => {
-      window.clearInterval(timer)
-      window.clearTimeout(resumeTimer)
-      window.removeEventListener('scroll', pauseWhileScrolling)
     }
   }, [])
 
@@ -271,8 +290,9 @@ function App() {
   }, [chatOpen])
 
   useEffect(() => {
-    const messagesElement = messagesRef.current
-    if (messagesElement) messagesElement.scrollTop = messagesElement.scrollHeight
+    ;[messagesRef.current, heroMessagesRef.current].forEach((messagesElement) => {
+      if (messagesElement) messagesElement.scrollTop = messagesElement.scrollHeight
+    })
   }, [messages])
 
   async function handleSend(event) {
@@ -347,9 +367,20 @@ function App() {
   return (
     <main data-theme={theme}>
       <a className="wordmark first-screen-mark" href="#top" aria-label="Binit Rajput home">BR<span>.</span></a>
-      <nav className={`nav shell ${hideNavAtProjects ? 'is-hidden' : ''}`} aria-label="Main navigation" aria-hidden={hideNavAtProjects}>
+      <nav className={`nav shell ${atWorkSection ? 'nav-at-work' : ''}`} aria-label="Main navigation">
         <div className="nav-center-links">
-          <a href="#work">Work</a><a href="#about">About</a>
+          <div className={`nav-section-links ${atWorkSection ? 'is-collapsed' : ''}`} inert={atWorkSection}>
+            <a href="#work">Work</a><a href="#about">About</a><span className="nav-divider" aria-hidden="true" />
+          </div>
+          <a className="nav-social-link" href="https://github.com/binitrajput" target="_blank" rel="noreferrer" aria-label="GitHub profile" title="GitHub">
+            <img src={githubLogo} alt="" /><span className="nav-social-name">GitHub</span>
+          </a>
+          <a className="nav-social-link nav-leetcode-link" href="https://leetcode.com/u/binit_rajput/" target="_blank" rel="noreferrer" aria-label="LeetCode profile" title="LeetCode">
+            <img src={leetcodeLogo} alt="" /><span className="nav-social-name">LeetCode</span>
+          </a>
+          <a className="nav-social-link" href="https://www.linkedin.com/in/binit-rajput-307a923b9/" target="_blank" rel="noreferrer" aria-label="LinkedIn profile" title="LinkedIn">
+            <img src={linkedinLogo} alt="" /><span className="nav-social-name">LinkedIn</span>
+          </a>
         </div>
       </nav>
       <button className="theme-toggle" type="button" onClick={() => setTheme((current) => current === 'light' ? 'dark' : 'light')} aria-label={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`} title={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}>
@@ -358,21 +389,37 @@ function App() {
 
       <section className="hero shell" id="top">
         <div className="hero-copy">
-          <p className="eyebrow"><span className="status-dot" /> OPEN TO OPPORTUNITIES <span className="eyebrow-year">· 2026</span></p>
-          <h1>Building useful<br />things for the <span className="highlight">internet<span className="highlight-dot">.</span></span></h1>
+          <div className="hero-brand"><span>✳</span> AI Portfolio Assistant</div>
+          <h1>AI Portfolio<br /><span className="highlight">Assistant</span></h1>
           <div className="hero-bottom">
-            <p className="hero-intro">Hey, I’m Binit — a software engineering student who loves turning curious ideas into thoughtful digital products.</p>
-            <a className="round-link" href="#work" aria-label="Scroll to selected work">↓</a>
+            <div>
+              <p className="hero-intro">An AI-powered portfolio and resume assistant that helps recruiters get quick, accurate answers about my education, skills, projects and experience.</p>
+              <div className="hero-tech-list">
+                <span><img src={pythonLogo} alt="" />Python</span>
+                <span><img src={fastapiLogo} alt="" />FastAPI</span>
+                <span><img src={reactLogo} alt="" />React</span>
+                <span><img src={llmLogo} alt="" />LLM APIs</span>
+              </div>
+            </div>
           </div>
         </div>
-        <div className="hero-art" aria-label="Illustration of a developer desk" role="img">
-          <div className="art-sun" />
-          <div className="art-orbit orbit-one" />
-          <div className="art-orbit orbit-two" />
-          <div className="art-window"><div className="window-top"><i /><i /><i /></div><div className="code-lines"><b /><b /><b /><b /><b /><b /></div><div className="window-cursor">▍</div></div>
-          <div className="art-sticker sticker-hello">HELLO<br />WORLD<span>!</span></div>
-          <div className="art-sticker sticker-asterisk">✳</div>
-          <span className="art-caption">MADE WITH CURIOSITY / IN KURUKSHETRA, INDIA</span>
+        <div className="hero-art hero-chat-scene">
+          <img className="scene-oval" src={sceneOval} alt="" />
+          <img className="scene-circular-lines" src={sceneCircularLines} alt="" />
+          <img className="scene-topic scene-topic-education" src={educationCard} alt="Education" />
+          <img className="scene-topic scene-topic-skills" src={skillsCard} alt="Skills" />
+          <img className="scene-topic scene-topic-projects" src={projectsCard} alt="Projects" />
+          <img className="scene-topic scene-topic-experience" src={experienceCard} alt="Experience" />
+          <p className="scene-arrow-copy">Ask anything<br />about my portfolio</p>
+          <img className="scene-arrow" src={sceneArrow} alt="" />
+          <section className="hero-chat-panel" aria-label="Chat with Binit’s AI assistant">
+            <header className="hero-chat-header"><span className="assistant-avatar">B<span>✳</span></span><div><b>Ask AI about Binit</b><small><span className="status-dot" /> Here to help</small></div><span className="hero-chat-close" aria-hidden="true">×</span></header>
+            <div className="chat-messages hero-chat-messages" aria-live="polite" ref={heroMessagesRef}>
+              {messages.length === 0 ? <div className="chat-empty"><p>Hi! Ask me about my projects, skills, education or experience.</p><div className="suggestions"><button type="button" onClick={() => setQuestion('What are my key projects?')}>What are my key projects? <span>↗</span></button><button type="button" onClick={() => setQuestion('What technologies does Binit use?')}>Explore my tech stack <span>↗</span></button></div></div> : messages.map((message, index) => <div className={`chat-message ${message.role}`} key={`hero-${message.role}-${index}`}><span className="message-label">{message.role === 'user' ? 'YOU' : 'BINIT’S ASSISTANT'}</span><p>{renderFormattedText(message.content || (isSending && index === messages.length - 1 ? 'Thinking…' : ''))}</p></div>)}
+            </div>
+            <form className="chat-form hero-chat-form" onSubmit={handleSend}><input aria-label="Ask the assistant a question" value={question} onChange={(event) => setQuestion(event.target.value)} placeholder="Ask a question about my work…" /><button type="submit" disabled={isSending || !question.trim()} aria-label="Send question">{isSending ? '…' : 'Send'} <span>↗</span></button></form>
+            <p className="chat-footnote">A small AI assistant, here to help you get to know my work.</p>
+          </section>
         </div>
       </section>
 

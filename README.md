@@ -22,7 +22,7 @@ A responsive developer portfolio built with React and Vite, with a FastAPI-power
 
 - Responsive portfolio with project, about, skills, and contact sections.
 - Light and dark themes, with the selection saved in the browser.
-- A draggable, looping project carousel with touch support, momentum, and automatic advancement.
+- A draggable, looping project carousel with touch support and momentum.
 - Project cards with screenshots, technology tags, and links to the Finance Clerk repository and live demo.
 - An AI chat modal with streamed answers and formatted emphasis.
 - FastAPI backend that streams responses generated from the profile in `profile.txt`.
@@ -48,11 +48,13 @@ A responsive developer portfolio built with React and Vite, with a FastAPI-power
    GROQ_API_KEY=your_groq_api_key
    ```
 
+   For local development, the API allows `http://localhost:5173` by default. Set `CORS_ORIGINS` to a comma-separated list of frontend origins when deploying.
+
 2. Install Python dependencies and start the API from the repository root:
 
    ```bash
    uv sync
-   uv run uvicorn main:app --reload
+   uv run uvicorn ai_portfolio.main:app --reload
    ```
 
    The API runs at `http://127.0.0.1:8000`.
@@ -80,8 +82,9 @@ npm run build
 
 ```text
 .
-├── main.py                         # FastAPI chat endpoint
+├── main.py                         # Compatibility ASGI entry point
 ├── profile.txt                     # Assistant profile context
+├── src/ai_portfolio/main.py        # FastAPI application
 ├── frontend/                       # React and Vite portfolio
 │   └── src/assets/projects/        # Project preview images
 ├── pyproject.toml                  # Python dependencies
